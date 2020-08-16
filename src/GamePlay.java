@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -14,6 +15,17 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 	private int[] snakeY = new int[750];
 	private int snakeLength = 3;
 	
+	private int[] enemyX = {25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325,
+							350, 375, 400, 425,	450, 475, 500, 525, 550, 575, 600, 625, 650,
+							675, 700, 725, 750,	775, 800, 825, 850}; 
+	
+	private int[] enemyY = {75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325,
+							350, 375, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625};
+	
+	private Random random = new Random();
+	private int posX = random.nextInt(enemyX.length);
+	private int posY = random.nextInt(enemyY.length);
+	
 	private boolean left = false;
 	private boolean right = false;
 	private boolean up = false;
@@ -21,6 +33,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 	
 	private ImageIcon titleImage;
 	private ImageIcon snakeImage;
+	private ImageIcon enemyImage;
 	
 	private ImageIcon rightMouth;
 	private ImageIcon leftMouth;
@@ -93,6 +106,16 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 				snakeImage.paintIcon(this, g, snakeX[i], snakeY[i]);
 			}
 		}
+		
+		enemyImage = new ImageIcon("assets/enemy.png");
+		
+		if((enemyX[posX] == snakeX[0]) && (enemyY[posY] == snakeY[0])) {
+			snakeLength++;
+			posX = random.nextInt(enemyX.length);
+			posY = random.nextInt(enemyY.length);
+		}
+		
+		enemyImage.paintIcon(this, g, enemyX[posX], enemyY[posY]);
 		
 		g.dispose();
 	}
