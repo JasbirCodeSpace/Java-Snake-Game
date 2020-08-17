@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +44,7 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 	private Timer timer;
 	private int delay = 100;
 	private int moves = 0;
+	private int scores =0;
 
 	public GamePlay() {
 		
@@ -81,6 +83,17 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.BLACK);
 		g.fillRect(25, 75, 850, 575);
 		
+		// draw score
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("arial", Font.PLAIN, 14));
+		g.drawString("Scores: "+scores, 780, 30);
+		
+		// draw length
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("arial", Font.PLAIN, 14));
+		g.drawString("Length: "+snakeLength, 780, 50);
+		
+		
 		rightMouth = new ImageIcon("assets/rightmouth.png");
 		rightMouth.paintIcon(this, g, snakeX[0], snakeY[0]);
 		
@@ -111,11 +124,29 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 		
 		if((enemyX[posX] == snakeX[0]) && (enemyY[posY] == snakeY[0])) {
 			snakeLength++;
+			scores++;
 			posX = random.nextInt(enemyX.length);
 			posY = random.nextInt(enemyY.length);
 		}
 		
 		enemyImage.paintIcon(this, g, enemyX[posX], enemyY[posY]);
+		
+		for(int i=1; i<snakeLength;i++) {
+			
+			if(snakeX[i] == snakeX[0] && snakeY[i] == snakeY[0]) {
+				
+				right = left = up = down = false;
+				
+				g.setColor(Color.WHITE);
+				g.setFont(new Font("arial", Font.BOLD, 50));
+				g.drawString("Game Over", 300, 300);
+				
+				g.setFont(new Font("arial", Font.BOLD, 20));
+				g.drawString("Press space to play again", 310, 340);
+				
+			}
+			
+		}
 		
 		g.dispose();
 	}
@@ -205,6 +236,14 @@ public class GamePlay extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+		if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			moves = 0;
+			scores = 0;
+			snakeLength = 3;
+			repaint();
+		}
+		
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			moves++;
 			if(!right) {
